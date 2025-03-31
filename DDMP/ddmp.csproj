@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <Title>DDMP</Title>
+        <Description>DDMP | Dungeon Drafters Mod Package</Description>
+        <Version>0.0.1</Version>
+        <PackageId>com.trotlinebeercan.ddmp</PackageId>
+        <ExecutableTarget>Dungeon Drafters.exe</ExecutableTarget>
+    </PropertyGroup>
+</Project>

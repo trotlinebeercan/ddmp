@@ -1,0 +1,74 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <DDSteamRootDir Condition="'$(DDSteamRootDir)' == ''">D:\SteamLibrary\steamapps\common\Dungeon Drafters\</DDSteamRootDir>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+        <GenerateDependencyFile>false</GenerateDependencyFile>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Product>DDMP</Product>
+        <Authors>trotlinebeercan</Authors>
+        <Company>trotlinebeercan</Company>
+        <Copyright>Copyright &#169; $([System.DateTime]::Now.Year) trotlinebeercan</Copyright>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <ProjectDirectoryName>$([System.IO.Path]::GetFileName($(MSBuildProjectDirectory)))</ProjectDirectoryName>
+        <RepositoryUrl>https://github.com/trotlinebeercan/DDMP</RepositoryUrl>
+        <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <MSBuildProjectExtensionsPath>$(SolutionDir)build</MSBuildProjectExtensionsPath>
+        <BaseIntermediateOutputPath>$(MSBuildProjectExtensionsPath)\obj</BaseIntermediateOutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DebugType>portable</DebugType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <DebugSymbols>False</DebugSymbols>
+        <DebugType>None</DebugType>
+    </PropertyGroup>
+
+    <!--Default all references to CopyLocal False.-->
+    <ItemDefinitionGroup>
+        <Reference>
+            <Private>False</Private>
+        </Reference>
+        <ProjectReference>
+            <Private>False</Private>
+        </ProjectReference>
+        <PackageReference>
+            <Private>False</Private>
+        </PackageReference>
+    </ItemDefinitionGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <!-- ScriptEngine expects debug plugins to be in the \scripts folder, so lets placate -->
+        <OutputPath Condition="Exists('$(DDSteamRootDir)BepInEx\plugins\ScriptEngine.dll')">$(DDSteamRootDir)BepInEx\scripts\</OutputPath>
+        <OutputPath Condition="'$(OutputPath)' == ''">$(DDSteamRootDir)BepInEx\plugins\$(MSBuildProjectName)</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <OutputPath>$(SolutionDir)release\stage\$(MSBuildProjectName)</OutputPath>
+    </PropertyGroup>
+
+    <Target Name="PostClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(SolutionDir)build" />
+        <RemoveDir Directories="$(SolutionDir)release" />
+    </Target>
+
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
+    </ItemGroup>
+</Project>
